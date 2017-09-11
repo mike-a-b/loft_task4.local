@@ -1,18 +1,21 @@
 body {
-  padding-top: 50px;
-}
+  padding-top: 50px; }
+
 .starter-template {
   padding: 40px 15px;
-  text-align: center;
-}
+  text-align: center; }
 
-.form-container{
+.form-container {
   margin-top: 25%;
   width: 100%;
   text-align: center;
   display: flex;
-  justify-content: center;
-}
+  justify-content: center; }
+
 .form-horizontal {
-  width: 35%;
-}
+  width: 35%; }
+
+#form__description {
+  margin: 0 auto; }
+
+/*# sourceMappingURL=starter-template.css.map */
