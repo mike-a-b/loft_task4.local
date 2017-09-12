@@ -62,23 +62,29 @@ if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
         if (isset($id_img)) {
             $data['file_type'] = explode('/', $file['type']);
             $path = 'photos/' . $data['id'].'.'.$data['file_type'][1];
-            $path2 = $path . '?'.$id_img;
+            $path2 = $path .'?'.$id_img;
 
             if (!$img->mime()) {
                 incorrect_value($data, "неверный mime type");
-            } else {
-                $jpg = (string)$img->encode('jpg', 90);
-                //save не смогу заставить заработать стандартно через GD драйвер получаю строку JPG из любого файла
             }
-//            $img->save($path, 100); //не работает c хвостом path2  пробовал
+            $jpg = (string)$img->encode('jpg', 90);
+            $img->save($path, 100); //не работает c хвостом path2  пробовал
+            move_uploaded_file($file['tmp_name'], $path);
+  /*              //save не смогу заставить заработать стандартно через GD драйвер получаю строку JPG из любого файла
+
+
             // с ларавел и т д Imagick GD в конфиге ругается на путь и с path просто для избежания кеширования изображения
-            // поэтому записываю $img->encode
-//            $path2 = 'photos/' . $data['id'] . '.' . $data['file_type'][1] . '?'.$id_img;
-            $handle = fopen($path2, 'w+');
-            if (isset($handle)) {
-                fwrite($handle, $jpg . PHP_EOL);
-                fclose($handle);
-            }
+            // поэтому записываю $img->encode [
+            // = fopen('anotherrtest.txt', "wt") or die('Ошибка при отрытии
+//        todo    $handle = fopen($path2, 'wt') or die('Ошибка при отрытии photo');
+//            if (isset($handle)) {
+//                fwrite($handle, $jpg . PHP_EOL) or die("Ошибка записи фото");
+//                fclose($handle);
+//            }
+            */
+  // todo не работает
+//            file_put_contents($path2, $jpg.PHP_EOL);// or die("Ошибка записи фото");
+            $file = $_FILES['file'];
             $data['upload'] = $path2;
             saveImageToDB($dbh, $data);
             $img->destroy();
@@ -89,6 +95,8 @@ if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
         $_SESSION['id_img'] = $id_img;
         closeConnection($dbh);
     }
+} else {
+    $data['error'] = "Данные не записаные попробуйте еще раз";
 }
 $data['error'] = "Данные успешно записаны";
 $data = json_encode($data, JSON_UNESCAPED_UNICODE);

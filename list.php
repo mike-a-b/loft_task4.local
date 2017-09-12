@@ -8,6 +8,12 @@ if (isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     header('Location: http://'.$_SERVER['SERVER_NAME'].'/index.php');
 }
+$params = require(__DIR__. '/backend/config.php');
+require_once(__DIR__. '/backend/db_functions.php');
+require_once __DIR__. '/backend/sec_functions.php';
+
+$dbh = getConnection($params);
+$users = getAllRegisterUsers($dbh);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -111,16 +117,7 @@ if (isset($_SESSION['id'])) {
           <th>Фотография</th>
           <th>Действия</th>
         </tr>
-        <tr>
-          <td>vasya99</td>
-          <td>Вася</td>
-          <td>14</td>
-          <td>Эксперт в спорах в интернете</td>
-          <td><img src="http://lorempixel.com/people/200/200/" alt=""></td>
-          <td>
-            <a href="">Удалить пользователя</a>
-          </td>
-        </tr>
+<!--      --><?php //foreach ( $users as $user ) : ?>
       </table>
 
     </div><!-- /.container -->
