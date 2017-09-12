@@ -1,3 +1,0 @@
-INSERT INTO lofttask4.users (login, password, name, age, description, photo) VALUES ('test@mail.ru', 'q2P3/lU8fzLJk', 'ivan', '28', 'description ', 'photos/1.jpeg?v=1');
-INSERT INTO lofttask4.users (login, password, name, age, description, photo) VALUES ('test2@mail.ru', 'q2vkFzzZrtIgw', 'petr', '29', '&lt; &gt;developer &lt; &gt; ', 'photos/2.jpeg?v=1');
-INSERT INTO lofttask4.users (login, password, name, age, description, photo) VALUES ('mail@mail.ru', 'q2b96Vzc.Y.eA', 'Владимир', '12', 'троль в интернете', 'photos/6.jpeg?v=2');
