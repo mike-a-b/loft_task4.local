@@ -54,14 +54,14 @@ if (isset($_POST['registration'])) {
         $data['error'] = "Ошибка попробуйте снова или авторизуйтесь, если вы уже зарегистрированы.";
         $data['password'] = null;
         $data['password2'] = null;
-        $data['id'] = null;
+//        $data['id'] = null;
     } else {
         $data['error'] = "Вы успешно зарегистрированы";
         $_SESSION['id'] = $data['id'];
         $_SESSION['password'] = $data['password'];
         $data['password'] = null;
         $data['password2'] = null;
-        $data['id'] = null;
+//        $data['id'] = null;
     }
     $data = json_encode($data, JSON_UNESCAPED_UNICODE);
     echo $data;
@@ -81,7 +81,7 @@ if (isset($_POST['auth'])) {
         $data['id'] = checkUserExist($dbh, $data['login']);
 
         if (!$data['id']) {
-            $_SESSION['id'] = null;
+//            $_SESSION['id'] = null;
             incorrect_value($dbh, "Неверный логин");
         }
         //пароль

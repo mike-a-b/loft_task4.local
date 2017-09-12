@@ -75,7 +75,6 @@ if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
 
             // с ларавел и т д Imagick GD в конфиге ругается на путь и с path просто для избежания кеширования изображения
             // поэтому записываю $img->encode [
-            // = fopen('anotherrtest.txt', "wt") or die('Ошибка при отрытии
 //        todo    $handle = fopen($path2, 'wt') or die('Ошибка при отрытии photo');
 //            if (isset($handle)) {
 //                fwrite($handle, $jpg . PHP_EOL) or die("Ошибка записи фото");

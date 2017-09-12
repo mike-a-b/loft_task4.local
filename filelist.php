@@ -1,7 +1,6 @@
 <?php
 session_start();
 $data = [];
-$user_reg = null;
 if (isset($_SESSION['id'])) {
     $data['id'] = $_SESSION['id'];
 } else {

@@ -1386,3 +1386,6 @@
 127.0.0.1 - - [12/Sep/2017:17:57:12 +0300] "GET /index.php HTTP/1.1" 200 1708 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
 127.0.0.1 - - [12/Sep/2017:17:57:25 +0300] "POST /backend/form_handlers.php HTTP/1.1" 200 486 "http://loft_task4.local/index.php" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
 127.0.0.1 - - [12/Sep/2017:17:57:27 +0300] "GET /list.php HTTP/1.1" 200 202 "http://loft_task4.local/index.php" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
+127.0.0.1 - - [12/Sep/2017:19:09:05 +0300] "GET /favicon.ico HTTP/1.1" 404 508 "http://loft_task4.local/list.php" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
+127.0.0.1 - - [12/Sep/2017:19:09:08 +0300] "GET /robots.txt HTTP/1.1" 404 507 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
+127.0.0.1 - - [12/Sep/2017:19:09:08 +0300] "GET /robots.txt HTTP/1.1" 404 506 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
