@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
         $('#form__description > p > span.result').css('visibility', 'invisible');
         // var form = $(this);
         var form = document.forms.namedItem("description_form");
-        var fd = new FormData(form);
+        var data = new FormData(form);
         // fd.append('file',  $('#file1')[0].files[0]);
         // fd.append('name',  $('#name1').val());
 
@@ -132,18 +132,21 @@ jQuery(document).ready(function($) {
             dataType: 'json',
             processData:false,
             contentType: false,
-            data: fd,
-            success: function (result) {
+            data: data,
+            success: function (respond, textStatus, jqXHR) {
+                console.log(respond);
+                // var json = JSON.parse(data);
                 alert('Успешная отправка файла и данных');
-                alert($.stringify(result.error));
-                if(result.error) {
-                    $('#form__description > p > span.result').css('visibility', 'visible');
-                    $('#form__description > p > span.result').html(result.error);
+                // alert(json.description);
+                if(respond.error) {
+                    $('span.result').css('visibility', 'visible');
+                    $('span.result').html(respond.error);
+                    debugger;
                 }
             },//success
             error: function (xhr, ajaxOption, thrownError) {
-                $('#form__description > p > span.result').css('visibility', 'visible');
-                $('#form__description > p > span.result').html("error " + xhr.status + " " + thrownError.toString());
+                $('span.result').css('visibility', 'visible');
+                $('span.result').html("error " + xhr.status + " " + thrownError.toString());
                 console.log(xhr.responseText);
                 console.log(xhr.status);
                 console.log(thrownError);

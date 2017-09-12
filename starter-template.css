@@ -17,5 +17,7 @@ body {
 
 #form__description {
   margin: 0 auto; }
+  #form__description > p {
+    text-align: center; }
 
 /*# sourceMappingURL=starter-template.css.map */

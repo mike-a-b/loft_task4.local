@@ -20,4 +20,7 @@ body {
 
 #form__description {
   margin:0 auto;
+  &>p {
+    text-align: center;
+  }
 }

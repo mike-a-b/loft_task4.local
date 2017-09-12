@@ -44,16 +44,20 @@ if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
         //сохраняем описание в базу и сохраняем photo
         //перед этим удаляем предыдущую
         $dbh = getConnection($params);
-
+// файл все равно перезаписывается если одно название
         if (($file_old = getImage($dbh, $data['id']))) {
             if (file_exists($file_old)) {
                 if (!unlink($file_old)) {
-                    die("Error delete old photo");
+                    die("Ошибка удаления старого фото");
                 }
+            } else {
+                $data['error'] = "Файл не существует";
             }
         }
 
         $id_img = saveDescriptionData($dbh, $data);
+        $id_img = explode(':', $id_img);
+        $id_img = implode("", $id_img);
 
         if (isset($id_img)) {
             $data['file_type'] = explode('/', $file['type']);
@@ -70,10 +74,11 @@ if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
             // с ларавел и т д Imagick GD в конфиге ругается на путь и с path просто для избежания кеширования изображения
             // поэтому записываю $img->encode
 //            $path2 = 'photos/' . $data['id'] . '.' . $data['file_type'][1] . '?'.$id_img;
-            $handle = fopen($path2, 'w');
-
-            fwrite($handle, $jpg.PHP_EOL);
-            fclose($handle);
+            $handle = fopen($path2, 'w+');
+            if (isset($handle)) {
+                fwrite($handle, $jpg . PHP_EOL);
+                fclose($handle);
+            }
             $data['upload'] = $path2;
             saveImageToDB($dbh, $data);
             $img->destroy();

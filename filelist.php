@@ -9,8 +9,6 @@ if (isset($_SESSION['id'])) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].'/index.php');
 }
 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
