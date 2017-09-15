@@ -106,7 +106,7 @@ $users = getAllRegisterUsers($dbh);
   </div>
 
     <div class="container">
-<!--    <h1>Запретная зона, доступ только авторизированному пользователю</h1>-->
+      <h2 class="click_response"></h2>
       <h2>Информация выводится из базы данных</h2>
       <table class="table table-bordered">
         <tr>
@@ -117,7 +117,18 @@ $users = getAllRegisterUsers($dbh);
           <th>Фотография</th>
           <th>Действия</th>
         </tr>
-<!--      --><?php //foreach ( $users as $user ) : ?>
+        <?php foreach ($users as $user) : ?>
+        <tr data-id="<?php print $user['id']?>">
+            <td><?php print $user['login']; ?></td>
+            <td><?php print $user['name']; ?></td>
+            <td><?php print $user['age']; ?></td>
+            <td><?php print $user['description']; ?></td>
+            <td><?php echo "<img src=\"{$user['photo']}\" alt='photo'/>"; ?></td>
+            <td data-id="<?php print $user['id']?>">
+                <a href="delete-user" class="delete">Удалить пользователя</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
       </table>
 
     </div><!-- /.container -->

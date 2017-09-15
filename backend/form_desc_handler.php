@@ -14,22 +14,21 @@ require_once(__DIR__. '/db_functions.php');
 require_once __DIR__. '/sec_functions.php';
 
 $file = $_FILES['upload'];
-require(__DIR__."/../vendor/autoload.php");
-//use Intervention\Image\Image;
-use Intervention\Image\ImageManagerStatic as Image;
+//require(__DIR__."/../vendor/
 
-Image::configure(/*array('driver' => 'imagick')*/);
+//use Intervention\Image\Image;
+
+//use Intervention\Image\ImageManagerStatic as Image;
+
+//Image::configure(array('driver' => 'imagick'));
 
 if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
     or preg_match('/gif/', $file['name'])) {
     if (preg_match('/jpeg/', $file['type']) or preg_match('/jpg/', $file['type']) or preg_match('/png/', $file['type'])
         or preg_match('/gif/', $file['type'])) {
-        //удаляем предыдущий файл
-
-
-        //Проверяем mime type
-        $img = Image::make($file['tmp_name']); //Открываем
-        $img->resize(100, 100); //Изменяем размер
+        //
+//        $img = Image::make($file['tmp_name']); //Открываем
+//        $img->resize(100, 100); //Изменяем размер
         //валидация
         $data['name'] = isset($_POST['name']) ? $_POST['name'] : '';
         $data['age'] = intval(isset($_POST['age'])) ? $_POST['age'] : '';
@@ -61,37 +60,47 @@ if (preg_match('/jpg/', $file['name']) or preg_match('/png/', $file['name'])
 
         if (isset($id_img)) {
             $data['file_type'] = explode('/', $file['type']);
-            $path = 'photos/' . $data['id'].'.'.$data['file_type'][1];
-            $path2 = $path .'?'.$id_img;
-
-            if (!$img->mime()) {
-                incorrect_value($data, "неверный mime type");
+            $filename = 'photos/' . $data['id'].'.'.$data['file_type'][1];
+            $filename2 = $filename .'?'.$id_img;
+            if (!file_exists('/../photos')) {
+                mkdir('/../photos', 0775);
             }
-            $jpg = (string)$img->encode('jpg', 90);
-            $img->save($path, 100); //не работает c хвостом path2  пробовал
-            move_uploaded_file($file['tmp_name'], $path);
-  /*              //save не смогу заставить заработать стандартно через GD драйвер получаю строку JPG из любого файла
+//            if (!$img->mime()) {
+//                incorrect_value($data, "неверный mime type");
+//            }
+//            $jpg = (string)$img->encode('jpg', 90);
+//            $img->save('photos/', 100); //не  работает
+            if (move_uploaded_file($file['tmp_name'], $filename)) {
+                $data['error']  = "Файл успешно записан";
+            } else {
+                incorrect_value($data, "Ошибка записи файла", 400);
+            }
+//            file_put_contents($filename, $jpg.PHP_EOL) or die("Ошибка записи файла");
+            //save не смогу заставить заработать стандартно через GD драйвер получаю строку JPG из любого файла
 
 
             // с ларавел и т д Imagick GD в конфиге ругается на путь и с path просто для избежания кеширования изображения
-            // поэтому записываю $img->encode [
-//        todo    $handle = fopen($path2, 'wt') or die('Ошибка при отрытии photo');
+//            // поэтому записываю $img->encode [
+//            $handle = fopen($filename, 'wt') or die('Ошибка при отрытии photo');
 //            if (isset($handle)) {
 //                fwrite($handle, $jpg . PHP_EOL) or die("Ошибка записи фото");
 //                fclose($handle);
 //            }
-            */
+
   // todo не работает
-//            file_put_contents($path2, $jpg.PHP_EOL);// or die("Ошибка записи фото");
-            $file = $_FILES['file'];
-            $data['upload'] = $path2;
+//            file_put_contents($filename2, $jpg.PHP_EOL);// or die("Ошибка записи фото");
+            //путь до файла
+//            $file = $_FILES['upload'];
+            $data['upload'] = $filename;
             saveImageToDB($dbh, $data);
-            $img->destroy();
+//            $img->destroy();
             unlink($file['tmp_name']);
+            //сохраняем хвост новой
+            $_SESSION['id_img'] = $id_img;
+            $_SESSION['photo'] = $filename;
         }
 
-        //сохраняем хвост новой
-        $_SESSION['id_img'] = $id_img;
+
         closeConnection($dbh);
     }
 } else {

@@ -1,7 +1,4 @@
 <?php
-/*
- * registration
- */
 session_start();
 $data = [];
 $data['error'] = false;
@@ -15,6 +12,9 @@ $params = require(__DIR__. '/config.php');
 require_once(__DIR__. '/db_functions.php');
 require_once __DIR__. '/sec_functions.php';
 
+/*
+ * registration form handler
+ */
 if (isset($_POST['registration'])) {
     $dbh = getConnection($params);
 
@@ -91,6 +91,8 @@ if (isset($_POST['auth'])) {
             //сравнение хеша со значением в БД
 
             $result = getUserPassword($dbh, $data['login']);
+            !$result ? incorrect_value($dbh, "Неверный пароль") : true;
+
             if (hash_equals($data['password'], $result)) {
                 //успешная авторизация запоминаем сессию
                 $_SESSION['id'] = $data['id'];
@@ -100,11 +102,8 @@ if (isset($_POST['auth'])) {
                 $data['id'] = null;
                 $data['password'] = null;
             }
-        } elseif (!$result) {
-            incorrect_value($dbh, "Неверный пароль");
         }
     }
-
     $data['error'] = "Вы успешно авторизированы";
     closeConnection($dbh);
     //возврат и парсинг значений json

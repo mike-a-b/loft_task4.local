@@ -27,6 +27,4 @@ function hashPassword(&$data)
     }
     $data['password'] = crypt($data['password'], "q2w3e4r5");
     return $data['password'];
-
-
 }

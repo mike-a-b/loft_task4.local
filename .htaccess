@@ -1,8 +1,5 @@
 Options All +Indexes
 AddDefaultCharset UTF-8
-php_value display_errors On
-php_value display_startup_errors On
-php_flag error_reporting E_ALL
 RewriteEngine On
 RewriteBase /
 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Работа с формами</title>
+    <style type="text/css">
+        div{
+            margin: 0 0 10px;
+        }
+
+        label, p{
+            font-weight: bold;
+        }
+
+        li{
+            list-style: none;
+        }
+
+        li > label{
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Форма</h1>
+<form action="action-post.php" method="post">
+    <div>
+        <label for="name">Имя</label><br />
+        <input type="text" name="name" id="name">
+    </div>
+    <div>
+        <label for="lastname">Фамилия</label><br />
+        <input type="text" name="lastname" id="lastname">
+    </div>
+    <div>
+        <label for="patronomyc">Отчество</label><br />
+        <input type="text" name="patronomyc" id="patronomyc">
+    </div>
+
+    <div>
+        <p>Пол</p>
+        <div>
+            <label for="male">Мужской</label>
+            <input type="radio" id="male" name="sex" value="male" checked>
+        </div>
+        <div>
+            <label for="female">Женский</label>
+            <input type="radio" id="female" name="sex" value="female">
+        </div>
+    </div>
+
+    <div>
+        <p>Ваши увличения</p>
+        <ul>
+            <li>
+                <label for="proggramism">
+                    Программирование
+                    <input id="proggramism" value="proggramism" type="checkbox" name="hobbies[]"></label>
+            </li>
+            <li>
+                <label for="football">
+                    Футбол
+                    <input type="checkbox" id="football" value="football" name="hobbies[]"></label>
+            </li>
+            <li>
+                <label for="reading">
+                    Чтение книг
+                    <input type="checkbox" id="reading" value="reading" name="hobbies[]"></label>
+            </li>
+            <li>
+                <label for="cinema">
+                    Просмотр фильмов
+                    <input type="checkbox" id="cinema" value="cinema" name="hobbies[]"></label>
+            </li>
+            <li>
+                <label for="dancing">
+                    Танцы
+                    <input type="checkbox" id="dancing" value="dancing" name="hobbies[]"></label>
+            </li>
+            <li>
+                <label for="other">
+                    Другое
+                    <input type="checkbox" id="other" value="other" name="hobbies[]"></label>
+            </li>
+        </ul>
+    </div>
+
+
+    <div>
+        <input type="submit" value="Начать поиск">
+    </div>
+</form>
+</body>
+</html>

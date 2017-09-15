@@ -1,26 +1,25 @@
 jQuery(document).ready(function($) {
-//     var selector = "div.starter-template>h1";
-//     var zagolovok = $(selector);
-//     var zagovol_data = zagolovok.html();
-//     zagolovok.html('ahaha');
-//
-//     console.log(zagovol_data);
-//
-//     $('#returnback').on('click', function () {
-//         // zagolovok.html(zagovol_data)
-//
-//         $.ajax({
-//             url: '/data.php',
-//             method: 'post',
-//             data: {
-//                 superdata: zagovol_data //$_POST['superdata']
-//             }
-//         }).done(function (data) {
-//             var json = JSON.parse(data);  //JSON.stringify()
-//             var str = json.name + ' - ' + json.occupation + json.superdata;
-//             zagolovok.html(str)
-//         });
-//     });
+
+    $('a.delete').on('click', function (event) {
+        event.preventDefault();
+        var login = $(this).parent().prop('data-id');
+        debugger;
+        $.ajax({
+            url: '/href_handlers.php',
+            method: 'post',
+            data: {
+                action: "delete"
+            }
+        }).success(function (data) {
+            console.log(data);
+            // var json = JSON.parse(data);
+            // var str = json.name + ' - ' + "удален со всеми данными и фото";
+            // $('.click_response').html(str);
+            // $
+        });//ajax
+    });//func
+
+
     //подсветка текущей страницы в меню
     $(function() {
         $('.navbar-nav a').each(function() {
@@ -43,17 +42,13 @@ jQuery(document).ready(function($) {
         var email = $('#inputEmail3').val();
         var pass = $('#inputPassword3').val();
         var pass_repeate = $('#inputPassword4').val();
-        // var reg = $('#form__reg').attr("name");
         // formData.append('email', email);
         // formData.append('pass', pass);
         // formData.append('pass__repeate', pass_repeate);
         $.ajax({
             url: '/backend/form_handlers.php',
             type: 'POST',
-            // processData:false,
-            // contentType: false,
             dataType: 'json',
-            // data: form,
             data: {
                 login:email,
                 password:pass,
@@ -68,7 +63,7 @@ jQuery(document).ready(function($) {
                     $('span.result').css('visibility', 'visible');
                     $('span.result').html(result.error);
                 }
-                // debugger;
+                // debugger
             },//success
             error: function (xhr, ajaxOption, thrownError) {
                 $('span.result').css('visibility', 'visible');
@@ -76,7 +71,6 @@ jQuery(document).ready(function($) {
                 console.log(xhr.responseText);
                 console.log(xhr.status);
                 console.log(thrownError);
-
             }//error
         }); //ajax
     });//function body
@@ -118,13 +112,13 @@ jQuery(document).ready(function($) {
 
     // desctiption form ajax
     $('#form__description').submit('click', function (e) {
-        $('#form__description > p > span.result').css('visibility', 'invisible');
+        $('span.result').css('visibility', 'invisible');
         // var form = $(this);
         var form = document.forms.namedItem("description_form");
         var data = new FormData(form);
-        // fd.append('file',  $('#file1')[0].files[0]);
+        data.append('file',  $('#file1')[0].files[0]);
         // fd.append('name',  $('#name1').val());
-
+        // debugger;
         e.preventDefault();
         $.ajax({
             url: '/backend/form_desc_handler.php',
@@ -135,14 +129,17 @@ jQuery(document).ready(function($) {
             data: data,
             success: function (respond, textStatus, jqXHR) {
                 console.log(respond);
-                // var json = JSON.parse(data);
+                // debugger;
+                var json = JSON.parse(data);
                 alert('Успешная отправка файла и данных');
                 // alert(json.description);
                 if(respond.error) {
                     $('span.result').css('visibility', 'visible');
                     $('span.result').html(respond.error);
-                    debugger;
                 }
+                // setTimeout(function () {
+                //     location.reload();
+                // }, 1000);
             },//success
             error: function (xhr, ajaxOption, thrownError) {
                 $('span.result').css('visibility', 'visible');
@@ -153,4 +150,4 @@ jQuery(document).ready(function($) {
             }//error
         }); //ajax
     });//function
-});
+});//
