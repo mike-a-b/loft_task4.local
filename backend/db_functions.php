@@ -137,7 +137,20 @@ function getImage(&$dbh, $id)
     }
 }
 
-function deleteUser(&$dbh, &$data) {
+function delImage(&$dbh, $id)
+{
+    $sql = "update users set photo = '' WHERE  id = :id";
+    $sth = $dbh->prepare($sql);
+    $sth->setFetchMode(PDO::FETCH_ASSOC);
+    $sth->bindParam(":id", $id, PDO::PARAM_INT);
+    if ($sth->execute()) {
+        return true;
+    }
+    return false;
+}
+
+function deleteUser(&$dbh, &$data)
+{
     try {
         $sql = "delete from users WHERE id = :id";
         $sth = $dbh->prepare($sql);
@@ -150,5 +163,4 @@ function deleteUser(&$dbh, &$data) {
         incorrect_value($data, $e->getMessage(), 500);
         return false;
     }
-    
 }

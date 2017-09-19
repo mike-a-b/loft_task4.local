@@ -12,6 +12,12 @@ function incorrect_value(&$data, $error_msg, $code = 422)
     echo json_encode($data['error'], JSON_UNESCAPED_UNICODE);
     exit();
 }
+function incorrect_value2(&$data, $error_msg, $code = 422)
+{
+    $data['error'] = $error_msg;
+    http_response_code($code);
+    exit($data['error']);
+}
 
 function hashPassword(&$data)
 {

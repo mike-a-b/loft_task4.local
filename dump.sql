@@ -31,7 +31,7 @@ CREATE TABLE `users` (
   `description` varchar(255) DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'test@mail.ru','q2P3/lU8fzLJk','Mike','28','description ','photos/1.png?v=112046'),(8,'mail@mail.ru','q2b96Vzc.Y.eA','Валера','21',' &lt; Студент &gt;;','photos/8.png?v=154137'),(9,'test2@mail.ru','q2P3/lU8fzLJk','petr','25','devops','photos/9.png?v=171040'),(10,'test3@mail.ru','q2P3/lU8fzLJk','Nikolay','27','Художник',NULL);
+INSERT INTO `users` VALUES (1,'test@mail.ru','q2P3/lU8fzLJk','MikeMike','22','jeff menson','photos/1.png'),(9,'test2@mail.ru','q2P3/lU8fzLJk','petr','20','devops',''),(10,'test3@mail.ru','q2P3/lU8fzLJk','123','12','123','photos/10.png'),(11,'test10@mail.ru','q2E/ie0LBckzE','Fedor','40','ufc &amp; mmma fighter','photos/11.png');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-12 18:29:15
+-- Dump completed on 2017-09-19 18:10:58

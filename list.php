@@ -16,16 +16,18 @@ $dbh = getConnection($params);
 $users = getAllRegisterUsers($dbh);
 
 //удаление пользователя
-if (isset($_GET['delete'])) {
+if (isset($_GET['id'])) {
     $photo = getImage($dbh, $data['id']);
-    if (file_exists(__DIR__.'/'.$photo)) {
-        $photo ? @unlink($photo) : incorrect_value($data, "Ошибка удаления пользователя", 500);
+    if (file_exists($photo)) {
+        if (!@unlink($photo)) {
+            incorrect_value2($data, "Ошибка удаления пользователя", 500);
+        }
+        if (deleteUser($dbh, $data)) {
+            header('Location: http://'.$_SERVER['SERVER_NAME'].'/list.php');
+        } else {
+            incorrect_value2($data, "Ошибка удаления пользователя", 500);
+        }
     }
-    deleteUser($dbh, $data) ?
-        header('Location: http://'.$_SERVER['SERVER_NAME'].'/list.php') :
-        incorrect_value($data, "Ошибка удаления пользователя", 500);
-} else {
-    incorrect_value($data, "Поддельный запрос", 401);
 }
 ?>
 <!DOCTYPE html>
@@ -143,7 +145,7 @@ if (isset($_GET['delete'])) {
             <td><?php print $user['age']; ?></td>
             <td><?php print $user['description']; ?></td>
             <td>
-            <?php echo "<img style='width=100px; max-width: 120px;' src=\"/{$user['photo']}\" alt='photo'/>"; ?></td>
+            <?php echo "<img style='width=100px; max-width:120px;' src=\"/{$user['photo']}\" alt='photo'/>"; ?></td>
             <td data-id="<?php print $user['id']?>">
                 <a href="<?php echo "?id=" . urlencode($user['id']); ?>">Удалить  пользователя</a>
 

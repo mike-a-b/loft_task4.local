@@ -10,21 +10,26 @@ if (isset($_SESSION['id'])) {
 }
 $params = require(__DIR__. '/backend/config.php');
 require_once(__DIR__. '/backend/db_functions.php');
-require_once __DIR__. '/backend/sec_functions.php';
+require_once(__DIR__. '/backend/sec_functions.php');
 
+//получаем данные для заполнения
 $dbh = getConnection($params);
 $users = getAllRegisterUsers($dbh);
 
-//удаление аватарки
-if (isset($_GET['delete'])) {
+//удаление аватарки по ссылке в таблице
+if (isset($_GET['id'])) {
     $photo = getImage($dbh, $data['id']);
-    if (file_exists(__DIR__.'/'.$photo)) {
-        $photo ? @unlink($photo) : incorrect_value($data, "Ошибка удаления аватарки", 500);
+    $dir = $_SERVER['DOCUMENT_ROOT'] . '/';
+    $filename = $dir.$photo;
+    if (file_exists($filename)) {
+        @unlink($filename) or incorrect_value2($data, "Ошибка удаления аватарки", 500);
     }
-    header('Location: http://'.$_SERVER['SERVER_NAME'].'/filelist.php');
-} else {
-    incorrect_value($data, "Поддельный запрос", 401);
+    if (!file_exists($filename)) {
+        delImage($dbh, $data['id']) or incorrect_value2($data, "Ошибка удаления аватарки", 500);
+    }
+//    header('Location: http://'.$_SERVER['SERVER_NAME'].'/filelist.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,14 +94,20 @@ if (isset($_GET['delete'])) {
         </tr>
         <?php foreach ($users as $user) : ?>
         <tr>
-          <td><?php echo explode('/', $user['photo'])[1]; ?></td>
           <td>
-            <?php echo "<img style='width=100px; max-width: 120px;' src=\"/{$user['photo']}\" alt='photo'/>"; ?>
+            <?php
+            if (!empty($user['photo'])) {
+                echo explode('/', $user['photo'])[1];
+            } else {
+                echo $user['login'] . " has no photo";
+            }
+            ?>
           </td>
           <td>
-            <td data-id="<?php print $user['id']?>">
+            <?php echo "<img style='width=100px; max-width: 120px;' src=\"{$user['photo']}\" alt='no photo'/>"; ?>
+          </td>
+          <td data-id="<?php print $user['id']?>">
                 <a href="<?php echo "?id=" . urlencode($user['id']); ?>">Удалить аватарку пользователя</a>
-            </td>
           </td>
         </tr>
         <?php endforeach; ?>
@@ -110,6 +121,5 @@ if (isset($_GET['delete'])) {
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
-
   </body>
 </html>
