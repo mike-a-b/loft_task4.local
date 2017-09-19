@@ -1,23 +1,23 @@
 jQuery(document).ready(function($) {
-
-    $('a.delete').on('click', function (event) {
-        event.preventDefault();
-        var login = $(this).parent().prop('data-id');
-        debugger;
-        $.ajax({
-            url: '/href_handlers.php',
-            method: 'post',
-            data: {
-                action: "delete"
-            }
-        }).success(function (data) {
-            console.log(data);
-            // var json = JSON.parse(data);
-            // var str = json.name + ' - ' + "удален со всеми данными и фото";
-            // $('.click_response').html(str);
-            // $
-        });//ajax
-    });//func
+    //
+    // $('a.delete').on('click', function (event) {
+    //     event.preventDefault();
+    //     var login = $(this).parent().prop('data-id');
+    //     debugger;
+    //     $.ajax({
+    //         url: '/href_handlers.php',
+    //         method: 'post',
+    //         data: {
+    //             action: "delete"
+    //         }
+    //     }).success(function (data) {
+    //         console.log(data);
+    //         // var json = JSON.parse(data);
+    //         // var str = json.name + ' - ' + "удален со всеми данными и фото";
+    //         // $('.click_response').html(str);
+    //         // $
+    //     });//ajax
+    // });//func
 
 
     //подсветка текущей страницы в меню
@@ -33,18 +33,10 @@ jQuery(document).ready(function($) {
     // registration form ajax
     $('#form__reg').submit('click', function (e) {
         e.preventDefault();
-        // var form = $(this);
-        // form.serialize();
-        // var form = document.getElementById('form__reg');
-        // var formData = new FormData(form);
-        //
         $('span.result').css('visibility', 'invisible');
         var email = $('#inputEmail3').val();
         var pass = $('#inputPassword3').val();
         var pass_repeate = $('#inputPassword4').val();
-        // formData.append('email', email);
-        // formData.append('pass', pass);
-        // formData.append('pass__repeate', pass_repeate);
         $.ajax({
             url: '/backend/form_handlers.php',
             type: 'POST',
@@ -67,7 +59,7 @@ jQuery(document).ready(function($) {
             },//success
             error: function (xhr, ajaxOption, thrownError) {
                 $('span.result').css('visibility', 'visible');
-                $('span.result').html("error " + xhr.status + " " + thrownError.toString());
+                $('span.result').html("error: " + xhr.status + " " + xhr.responseText);
                 console.log(xhr.responseText);
                 console.log(xhr.status);
                 console.log(thrownError);
@@ -93,16 +85,17 @@ jQuery(document).ready(function($) {
                 auth:"auth"
             },
             success: function (result) {
-                alert('ok..success authorization');
                 // alert(result.id);
                 if(result.error) {
                     $('span.result').css('visibility', 'visible');
                     $('span.result').html(result.error);
+                } else {
+                    alert('ok..success authorization');
                 }
             },//success
             error: function (xhr, ajaxOption, thrownError) {
                 $('span.result').css('visibility', 'visible');
-                $('span.result').html("error " + xhr.status + " " + thrownError.toString());
+                $('span.result').html("error: " + xhr.status /*+ " " + xhr.responseText*/);
                 console.log(xhr.responseText);
                 console.log(xhr.status);
                 console.log(thrownError);
@@ -110,14 +103,12 @@ jQuery(document).ready(function($) {
         }); //ajax
     });//function
 
-    // desctiption form ajax
+    // description form ajax
     $('#form__description').submit('click', function (e) {
         $('span.result').css('visibility', 'invisible');
         // var form = $(this);
         var form = document.forms.namedItem("description_form");
         var data = new FormData(form);
-        data.append('file',  $('#file1')[0].files[0]);
-        // fd.append('name',  $('#name1').val());
         // debugger;
         e.preventDefault();
         $.ajax({
@@ -130,24 +121,27 @@ jQuery(document).ready(function($) {
             success: function (respond, textStatus, jqXHR) {
                 console.log(respond);
                 // debugger;
-                var json = JSON.parse(data);
-                alert('Успешная отправка файла и данных');
-                // alert(json.description);
-                if(respond.error) {
+                if (respond.error === "Данные успешно записаны") {
+                    alert("Успешная отправка файла и данных");
+                    $('span.result').css('visibility', 'visible');
+                    $('span.result').html(respond.error);
+                } else {
+                    alert("Неуспешная отправка файла и данных");
                     $('span.result').css('visibility', 'visible');
                     $('span.result').html(respond.error);
                 }
-                // setTimeout(function () {
-                //     location.reload();
+                            // setTimeout(function () {
+                window.location.reload();
                 // }, 1000);
             },//success
-            error: function (xhr, ajaxOption, thrownError) {
+            error: function (respond, xhr, ajaxOption, thrownError) {
                 $('span.result').css('visibility', 'visible');
-                $('span.result').html("error " + xhr.status + " " + thrownError.toString());
+                $('span.result').html("error: " + xhr.status + " " + thrownError.toString());
                 console.log(xhr.responseText);
                 console.log(xhr.status);
                 console.log(thrownError);
-            }//error
+                console.log(respond.error);
+                }//error
         }); //ajax
     });//function
 });//

@@ -8,7 +8,8 @@
 function incorrect_value(&$data, $error_msg, $code = 422)
 {
     $data['error'] = $error_msg;
-    echo http_response_code($code);
+    http_response_code($code);
+    echo json_encode($data['error'], JSON_UNESCAPED_UNICODE);
     exit();
 }
 

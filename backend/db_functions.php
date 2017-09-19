@@ -136,3 +136,19 @@ function getImage(&$dbh, $id)
         return false;
     }
 }
+
+function deleteUser(&$dbh, &$data) {
+    try {
+        $sql = "delete from users WHERE id = :id";
+        $sth = $dbh->prepare($sql);
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $sth->bindParam(':id', $data['id'], PDO::PARAM_INT);
+        if ($sth->execute()) {
+            return true;
+        }
+    } catch (PDOException $e) {
+        incorrect_value($data, $e->getMessage(), 500);
+        return false;
+    }
+    
+}

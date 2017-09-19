@@ -63,7 +63,7 @@ if (isset($_SESSION['id'])) {
       <div class="form-container">
         <form class="form-horizontal" name="auth" method="post" id="form_auth">
             <p class="alert alert-info invisible">
-                Ошибка:<br><span class="result"></span>
+                <span class="result"></span>
             </p>
           <div class="form-group">
             <label for="inputEmail" class="col-sm-2 control-label">Логин</label>
@@ -80,8 +80,13 @@ if (isset($_SESSION['id'])) {
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
               <input type="submit" class="btn btn-default" value="Войти">
-              <br><br>
-              Нет аккаунта? <a href="reg.php">Зарегистрируйтесь</a>
+                <?php if (isset($_SESSION['id'])) : ?>
+                <button class="btn btn-default">
+                    <a href="user_logout.php">Выйти из сессии</a>
+                </button>
+                <?php endif; ?></span><br>
+              <br>
+              Нет аккаунта? <a href="reg.php">Зарегистрируйтесь</a><br>
             </div>
           </div>
         </form>

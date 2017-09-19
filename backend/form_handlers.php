@@ -54,14 +54,14 @@ if (isset($_POST['registration'])) {
         $data['error'] = "Ошибка попробуйте снова или авторизуйтесь, если вы уже зарегистрированы.";
         $data['password'] = null;
         $data['password2'] = null;
-//        $data['id'] = null;
+        $data['login'] = null;
     } else {
         $data['error'] = "Вы успешно зарегистрированы";
         $_SESSION['id'] = $data['id'];
         $_SESSION['password'] = $data['password'];
+        $_SESSION['login'] = $data['login'];
         $data['password'] = null;
         $data['password2'] = null;
-//        $data['id'] = null;
     }
     $data = json_encode($data, JSON_UNESCAPED_UNICODE);
     echo $data;
@@ -70,19 +70,19 @@ if (isset($_POST['registration'])) {
 if (isset($_POST['auth'])) {
     $dbh = getConnection($params);
     //логин
-    $data['login'] = isset($_POST['login']) ? $_POST['login'] : '';
+    $data['login'] = isset($_POST['login']) ? $_POST['login'] : "";
     if ($data['login'] = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_EMAIL)) {
         $data['login'] = filter_var($data['login'], FILTER_VALIDATE_EMAIL);
 
         if (!$data['login']) {
-            incorrect_value($data, "Логин содержит недопустимые символы", 422);
+            incorrect_value($data, "Логин не существует или содержит недопустимые символы", 422);
         }
 
         $data['id'] = checkUserExist($dbh, $data['login']);
 
         if (!$data['id']) {
 //            $_SESSION['id'] = null;
-            incorrect_value($dbh, "Неверный логин");
+            incorrect_value($data, "Неверный логин");
         }
         //пароль
         $data['password'] = isset($_POST['password']) ? $_POST['password'] : '';
@@ -91,8 +91,10 @@ if (isset($_POST['auth'])) {
             //сравнение хеша со значением в БД
 
             $result = getUserPassword($dbh, $data['login']);
-            !$result ? incorrect_value($dbh, "Неверный пароль") : true;
-
+            if (!$result) {
+                incorrect_value($data, "Неверный пароль");
+            }
+            
             if (hash_equals($data['password'], $result)) {
                 //успешная авторизация запоминаем сессию
                 $_SESSION['id'] = $data['id'];
@@ -101,6 +103,11 @@ if (isset($_POST['auth'])) {
 
                 $data['id'] = null;
                 $data['password'] = null;
+            } else {
+                unset($data);
+                $data['error'] = "Неверный пароль";
+                echo json_encode($data, JSON_UNESCAPED_UNICODE);
+                die();
             }
         }
     }

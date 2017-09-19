@@ -1,19 +1,32 @@
 <?php
 session_start();
 $data = [];
-$user_reg = null;
 if (isset($_SESSION['id'])) {
     $data['id'] = $_SESSION['id'];
+    $data['login'] = $_SESSION['login'];
 } else {
     header('HTTP/1.1 401 Unauthorized');
     header('Location: http://'.$_SERVER['SERVER_NAME'].'/index.php');
 }
 $params = require(__DIR__. '/backend/config.php');
 require_once(__DIR__. '/backend/db_functions.php');
-require_once __DIR__. '/backend/sec_functions.php';
+require_once(__DIR__. '/backend/sec_functions.php');
 
 $dbh = getConnection($params);
 $users = getAllRegisterUsers($dbh);
+
+//удаление пользователя
+if (isset($_GET['delete'])) {
+    $photo = getImage($dbh, $data['id']);
+    if (file_exists(__DIR__.'/'.$photo)) {
+        $photo ? @unlink($photo) : incorrect_value($data, "Ошибка удаления пользователя", 500);
+    }
+    deleteUser($dbh, $data) ?
+        header('Location: http://'.$_SERVER['SERVER_NAME'].'/list.php') :
+        incorrect_value($data, "Ошибка удаления пользователя", 500);
+} else {
+    incorrect_value($data, "Поддельный запрос", 401);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,12 +79,12 @@ $users = getAllRegisterUsers($dbh);
           </div><!--/.nav-collapse -->
       </div>
   </nav>
-
-  <div class="container">
-      <form class="form-horizontal" method="post" id="form__description"
-            name = "description_form" enctype="multipart/form-data">
+<!--форма добавления пользователя-->
+  <div class="contaiqner">
+      <form class="form-horizontal" method="post" action=""
+            name = "description_form" enctype="multipart/form-data" id="form__description">
           <p class="alert alert-info invisible">
-              <span class="result"></span>
+              <span class="result">Авторизуйтесь или зарегистрируйтесь</span><br>
           </p>
           <div class="form-group">
               <label for="name" class="control-label col-sm-2">Имя</label>
@@ -99,14 +112,19 @@ $users = getAllRegisterUsers($dbh);
           </div>
           <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                  <input type="submit" class="btn btn-info" value="Отправить" />
+                  <input type="submit" name="desc_submit" class="btn btn-info" value="Отправить" />
+                <?php if (isset($_SESSION['id'])) : ?>
+                  <button class="btn btn-info"><a href="user_logout.php">Выйти из сессии</a></button>
+                <?php endif; ?>
               </div>
           </div>
       </form>
   </div>
-
+  
     <div class="container">
-      <h2 class="click_response"></h2>
+        <?php if (isset($_GET['id'])) : ?>
+      <h2 class="click_response"> <?php print "Пользователь {$_SESSION['login']} удален!" ?></h2>
+        <?php endif; ?>
       <h2>Информация выводится из базы данных</h2>
       <table class="table table-bordered">
         <tr>
@@ -117,23 +135,26 @@ $users = getAllRegisterUsers($dbh);
           <th>Фотография</th>
           <th>Действия</th>
         </tr>
-        <?php foreach ($users as $user) : ?>
+        <?php
+        foreach ($users as $user) : ?>
         <tr data-id="<?php print $user['id']?>">
             <td><?php print $user['login']; ?></td>
-            <td><?php print $user['name']; ?></td>
+            <td><?php print $user['name']; ?><?php print $user['name']; ?></td>
             <td><?php print $user['age']; ?></td>
             <td><?php print $user['description']; ?></td>
-            <td><?php echo "<img src=\"{$user['photo']}\" alt='photo'/>"; ?></td>
+            <td>
+            <?php echo "<img style='width=100px; max-width: 120px;' src=\"/{$user['photo']}\" alt='photo'/>"; ?></td>
             <td data-id="<?php print $user['id']?>">
-                <a href="delete-user" class="delete">Удалить пользователя</a>
+                <a href="<?php echo "?id=" . urlencode($user['id']); ?>">Удалить  пользователя</a>
+
             </td>
         </tr>
         <?php endforeach; ?>
       </table>
-
     </div><!-- /.container -->
+    
 
-
+  
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

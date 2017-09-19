@@ -1,12 +1,12 @@
 <?php
 session_start();
 $data = [];
-$user_reg = null;
 if (isset($_SESSION['id'])) {
     $data['id'] = $_SESSION['id'];
+    $data['login'] = $_SESSION['login'];
 } else {
     header('HTTP/1.1 401 Unauthorized');
-    header('Location: http://' . $_SERVER['SERVER_NAME'] . '/index.php');
+    header('Location: http://'.$_SERVER['SERVER_NAME'].'/index.php');
 }
 $params = require(__DIR__. '/backend/config.php');
 require_once(__DIR__. '/backend/db_functions.php');
@@ -14,6 +14,17 @@ require_once __DIR__. '/backend/sec_functions.php';
 
 $dbh = getConnection($params);
 $users = getAllRegisterUsers($dbh);
+
+//удаление аватарки
+if (isset($_GET['delete'])) {
+    $photo = getImage($dbh, $data['id']);
+    if (file_exists(__DIR__.'/'.$photo)) {
+        $photo ? @unlink($photo) : incorrect_value($data, "Ошибка удаления аватарки", 500);
+    }
+    header('Location: http://'.$_SERVER['SERVER_NAME'].'/filelist.php');
+} else {
+    incorrect_value($data, "Поддельный запрос", 401);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,18 +87,23 @@ $users = getAllRegisterUsers($dbh);
           <th>Фотография</th>
           <th>Действия</th>
         </tr>
+        <?php foreach ($users as $user) : ?>
         <tr>
-          <td>1.jpg</td>
-          <td><img src="http://lorempixel.com/people/200/200/" alt=""></td>
+          <td><?php echo explode('/', $user['photo'])[1]; ?></td>
           <td>
-            <a href="">Удалить аватарку пользователя</a>
+            <?php echo "<img style='width=100px; max-width: 120px;' src=\"/{$user['photo']}\" alt='photo'/>"; ?>
+          </td>
+          <td>
+            <td data-id="<?php print $user['id']?>">
+                <a href="<?php echo "?id=" . urlencode($user['id']); ?>">Удалить аватарку пользователя</a>
+            </td>
           </td>
         </tr>
+        <?php endforeach; ?>
       </table>
 
     </div><!-- /.container -->
-
-
+  
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
